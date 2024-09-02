@@ -7,10 +7,7 @@ import com.emazon.shopping_cart.infraestructure.rest.dto.request.CardItemAddRequ
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/shoppingcart")
@@ -22,6 +19,12 @@ public class ShoppingCartController {
     public ResponseEntity<String> addItemToShoppingCart(@RequestBody CardItemAddRequestDto cardItemAddRequestDto){
         shoppingCartService.addItemToCart(1L, CartItemMapper.dtoToDomain(cardItemAddRequestDto));
         return new ResponseEntity<>("Item added sucesfully", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/items/{itemId}")
+    public ResponseEntity<String> removeItemFromShoppingCart(@PathVariable Long itemId){
+        shoppingCartService.removeItemFromCart(itemId);
+        return new ResponseEntity<>("Item deleted sucesfully", HttpStatus.OK);
     }
 
 

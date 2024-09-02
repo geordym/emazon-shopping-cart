@@ -39,4 +39,10 @@ public class CartItemRepositoryMySQLAdapter implements CartItemRepositoryPort{
 
         return Optional.of(CartItemMapper.entityToDomain(cartItemEntityOptional.get(), false));
     }
+
+    @Override
+    public void removeItemFromCart(Long cartItemId) {
+        cartItemCrudRepositoryMySQL.deleteById(cartItemId);
+    }
+
 }

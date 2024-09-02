@@ -30,7 +30,7 @@ public class ShoppingCartUseCaseImpl implements ShoppingCartUseCase {
 
     @Override
     public void removeItemFromCart(Long cartItemId) {
-
+        cartItemRepositoryPort.removeItemFromCart(cartItemId);
     }
 
     private ShoppingCart getOrCreateShoppingCart(Long userId) {
