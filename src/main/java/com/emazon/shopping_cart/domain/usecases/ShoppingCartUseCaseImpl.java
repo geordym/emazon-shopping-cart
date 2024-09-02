@@ -9,6 +9,7 @@ import com.emazon.shopping_cart.infraestructure.mapper.ShoppingCartMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
@@ -19,13 +20,20 @@ public class ShoppingCartUseCaseImpl implements ShoppingCartUseCase {
 
     @Override
     public void addItemToCart(Long userId, CartItem cartItem) {
+
+        if (userId == null || cartItem == null) {
+            throw new IllegalArgumentException("userId and cartItem must not be null");
+        }
+
+
+
         ShoppingCart shoppingCartUser = getOrCreateShoppingCart(userId);
         CartItem cartItemToAdd = findOrCreateCartItem(
                 cartItem.getIdArticle(), shoppingCartUser.getId(), cartItem, shoppingCartUser);
 
         cartItemRepositoryPort.addItemToCart(cartItemToAdd);
         shoppingCartRepositoryPort.updateShoppingCartUpdatedAt(shoppingCartUser.getId(),
-                LocalDate.now());
+                LocalDateTime.now());
     }
 
     @Override
@@ -37,7 +45,7 @@ public class ShoppingCartUseCaseImpl implements ShoppingCartUseCase {
         return shoppingCartRepositoryPort
                 .getShoppingCartByUserId(userId)
                 .orElseGet(() -> shoppingCartRepositoryPort
-                        .createShoppingCartForUser(userId, LocalDate.now(), LocalDate.now())
+                        .createShoppingCartForUser(userId, LocalDateTime.now(), LocalDateTime.now())
                 );
     }
 

@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class ShoppingCartRepositoryMySQLAdapter implements ShoppingCartRepositor
     }
 
     @Transactional
-    public ShoppingCart createShoppingCartForUser(Long userId, LocalDate createdAt, LocalDate updatedAt) {
+    public ShoppingCart createShoppingCartForUser(Long userId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         ShoppingCartEntity newShoppingCart = new ShoppingCartEntity();
         newShoppingCart.setCustomerId(userId);
         newShoppingCart.setCreatedAt(createdAt);
@@ -50,7 +51,7 @@ public class ShoppingCartRepositoryMySQLAdapter implements ShoppingCartRepositor
     }
 
     @Transactional
-    public void updateShoppingCartUpdatedAt(Long shoppingCartId, LocalDate updatedAt) {
+    public void updateShoppingCartUpdatedAt(Long shoppingCartId, LocalDateTime updatedAt) {
         Optional<ShoppingCartEntity> optionalShoppingCart = shoppingCartCrudRepositoryMySQL.findById(shoppingCartId);
         if (optionalShoppingCart.isPresent()) {
             ShoppingCartEntity shoppingCart = optionalShoppingCart.get();

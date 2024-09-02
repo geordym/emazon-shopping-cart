@@ -2,14 +2,15 @@ package com.emazon.shopping_cart.domain.model;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ShoppingCart {
     private final Long id;
     private List<CartItem> cartItems;
     private final Long customerId;
-    private final LocalDate updatedAt;
-    private final LocalDate createdAt;
+    private final LocalDateTime updatedAt;
+    private final LocalDateTime createdAt;
 
     private ShoppingCart(Builder builder) {
         this.id = builder.id;
@@ -31,11 +32,11 @@ public class ShoppingCart {
 
 
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
@@ -44,8 +45,8 @@ public class ShoppingCart {
         private Long id;
         private List<CartItem> cartItems;
         private Long customerId;
-        private LocalDate updatedAt;
-        private LocalDate createdAt;
+        private LocalDateTime updatedAt;
+        private LocalDateTime createdAt;
 
         public Builder withId(Long id) {
             this.id = id;
@@ -64,12 +65,12 @@ public class ShoppingCart {
 
 
 
-        public Builder withUpdatedAt(LocalDate updatedAt) {
+        public Builder withUpdatedAt(LocalDateTime updatedAt) {
             this.updatedAt = updatedAt;
             return this;
         }
 
-        public Builder withCreatedAt(LocalDate createdAt) {
+        public Builder withCreatedAt(LocalDateTime createdAt) {
             this.createdAt = createdAt;
             return this;
         }
