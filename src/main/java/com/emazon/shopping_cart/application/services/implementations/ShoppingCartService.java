@@ -10,8 +10,8 @@ public class ShoppingCartService implements IShoppingCartService {
 
     private final ShoppingCartUseCase shoppingCartUseCase;
     @Override
-    public void addItemToCart(Long userId, CartItem cartItem) {
-        shoppingCartUseCase.addItemToCart(userId,cartItem);
+    public void addItemToCart(Long clientId, CartItem cartItem) {
+        shoppingCartUseCase.addItemToCart(clientId,cartItem);
     }
 
     @Override

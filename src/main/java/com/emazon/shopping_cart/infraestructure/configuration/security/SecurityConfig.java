@@ -39,10 +39,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> {
                    // registry.requestMatchers("/api/marcas").hasAuthority(RoleEnum.ADMINISTRADOR.getName());
                    // registry.requestMatchers("/api/categories").hasAuthority(RoleEnum.ADMINISTRADOR.getName());
-                   // registry.requestMatchers("/api/articulos").hasAuthority(RoleEnum.ADMINISTRADOR.getName());
-                    registry.anyRequest().permitAll();
+                    registry.requestMatchers("/api/shoppingcart/items").hasAuthority(RoleEnum.CLIENTE.getName());
                 })
-                //.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }

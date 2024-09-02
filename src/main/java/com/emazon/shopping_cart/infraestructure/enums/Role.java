@@ -1,4 +1,4 @@
-package com.emazon.shopping_cart.domain.model;
+package com.emazon.shopping_cart.infraestructure.enums;
 
 import lombok.Getter;
 import lombok.Setter;

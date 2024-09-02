@@ -5,6 +5,7 @@ import com.emazon.shopping_cart.domain.model.ShoppingCart;
 import com.emazon.shopping_cart.domain.ports.in.ShoppingCartUseCase;
 import com.emazon.shopping_cart.domain.ports.out.CartItemRepositoryPort;
 import com.emazon.shopping_cart.domain.ports.out.ShoppingCartRepositoryPort;
+import com.emazon.shopping_cart.domain.usecases.validators.ShoppingCartUseCaseValidator;
 import com.emazon.shopping_cart.infraestructure.mapper.ShoppingCartMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -17,17 +18,15 @@ public class ShoppingCartUseCaseImpl implements ShoppingCartUseCase {
 
     private final ShoppingCartRepositoryPort shoppingCartRepositoryPort;
     private final CartItemRepositoryPort cartItemRepositoryPort;
+    private final ShoppingCartUseCaseValidator shoppingCartUseCaseValidator;
 
     @Override
-    public void addItemToCart(Long userId, CartItem cartItem) {
+    public void addItemToCart(Long clientId, CartItem cartItem) {
 
-        if (userId == null || cartItem == null) {
-            throw new IllegalArgumentException("userId and cartItem must not be null");
-        }
+        shoppingCartUseCaseValidator.validateAddItemToCart(clientId, cartItem);
 
 
-
-        ShoppingCart shoppingCartUser = getOrCreateShoppingCart(userId);
+        ShoppingCart shoppingCartUser = getOrCreateShoppingCart(clientId);
         CartItem cartItemToAdd = findOrCreateCartItem(
                 cartItem.getIdArticle(), shoppingCartUser.getId(), cartItem, shoppingCartUser);
 

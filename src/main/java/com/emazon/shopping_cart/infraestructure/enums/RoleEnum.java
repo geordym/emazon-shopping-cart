@@ -2,8 +2,6 @@ package com.emazon.shopping_cart.infraestructure.enums;
 
 
 
-import com.emazon.shopping_cart.domain.model.Role;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +28,6 @@ public enum RoleEnum {
         return name;
     }
 
-    // Método para obtener un Role por su nombre
     public static RoleEnum fromName(String name) {
         for (RoleEnum roleEnum : RoleEnum.values()) {
             if (roleEnum.getName().equalsIgnoreCase(name)) {
@@ -40,7 +37,6 @@ public enum RoleEnum {
         throw new IllegalArgumentException("No se encontró el rol con el nombre: " + name);
     }
 
-    // Método para obtener un Role por su ID
     public static RoleEnum fromId(Long id) {
         for (RoleEnum roleEnum : RoleEnum.values()) {
             if (roleEnum.getId() == id) {

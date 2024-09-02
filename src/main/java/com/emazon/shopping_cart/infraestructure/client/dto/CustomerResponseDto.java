@@ -9,9 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserInfoDto {
-
-    private Long idUser;
-    private String username;
-    private List<String> roles;
+public class CustomerResponseDto {
+    public Long customerId;
+    public String username;
 }
+
