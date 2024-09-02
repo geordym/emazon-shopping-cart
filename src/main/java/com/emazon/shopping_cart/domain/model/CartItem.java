@@ -6,7 +6,11 @@ public class CartItem {
     private final ShoppingCart shoppingCart;
     private final Long idArticle;
     private final Integer quantity;
-    private final Double price;
+    public final Double price;
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
 
     private CartItem(Builder builder) {
         this.id = builder.id;

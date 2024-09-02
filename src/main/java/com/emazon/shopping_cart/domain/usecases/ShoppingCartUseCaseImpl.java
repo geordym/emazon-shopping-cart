@@ -19,12 +19,10 @@ public class ShoppingCartUseCaseImpl implements ShoppingCartUseCase {
     @Override
     public void addItemToCart(Long userId, CartItem cartItem) {
         ShoppingCart shoppingCartUser = getOrCreateShoppingCart(userId);
-        cartItemRepositoryPort.addItemToCart(shoppingCartUser.getId(),
-                cartItem.getIdArticle(),
-                cartItem.getQuantity(),
-                cartItem.getPrice()
-                );
+        CartItem cartItemToAdd = getCardItemByArticleIdAndShoppingCartIdOrCreate(
+                cartItem.getIdArticle(), shoppingCartUser.getId(), cartItem, shoppingCartUser);
 
+        cartItemRepositoryPort.addItemToCart(cartItemToAdd);
         shoppingCartRepositoryPort.updateShoppingCartUpdatedAt(shoppingCartUser.getId(),
                 LocalDate.now());
     }
@@ -41,5 +39,31 @@ public class ShoppingCartUseCaseImpl implements ShoppingCartUseCase {
                         .createShoppingCartForUser(userId, LocalDate.now(), LocalDate.now())
                 );
     }
+
+
+    private CartItem getCardItemByArticleIdAndShoppingCartIdOrCreate(Long articleId,
+                                                                             Long shoppingCartId, CartItem cartItem, ShoppingCart shoppingCart) {
+        return cartItemRepositoryPort
+                .findByArticleIdAndShoppingCartId(articleId, shoppingCartId)
+                .map(existingCartItem -> new CartItem.Builder()
+                        .withId(existingCartItem.getId())
+                        .withIdArticle(existingCartItem.getIdArticle())
+                        .withPrice(existingCartItem.getPrice())
+                        .withQuantity(existingCartItem.getQuantity() + cartItem.getQuantity()) // Actualiza la cantidad
+                        .withShoppingCart(shoppingCart)
+                        .build()
+                )
+                .orElseGet(() -> new CartItem.Builder()
+                        .withId(null) // ID nulo si será generado automáticamente por la base de datos
+                        .withIdArticle(articleId) // Establece el ID del artículo
+                        .withPrice(cartItem.getPrice())
+                        .withQuantity(cartItem.getQuantity())
+                        .withShoppingCart(shoppingCart)
+                        .build()
+                );
+
+    }
+
+
 
 }
