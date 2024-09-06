@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/api/shoppingcart/items").hasRole(RoleEnum.CLIENTE.getName());
+                    registry.requestMatchers("/api/shop").hasRole(RoleEnum.CLIENTE.getName());
                 })
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
