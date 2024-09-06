@@ -1,46 +1,38 @@
 package com.emazon.shopping_cart.infraestructure.configuration.security;
 
 
-
-import com.emazon.shopping_cart.infraestructure.client.CustomerFeignClient;
-import com.emazon.shopping_cart.infraestructure.client.dto.CustomerResponseDto;
-import com.emazon.shopping_cart.infraestructure.client.dto.UserInfoDto;
+import com.emazon.shopping_cart.domain.ports.out.security.TokenProviderPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.Collection;
 
 
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final CustomerFeignClient userRepository;
-
+    private final TokenProviderPort tokenProviderPort;
+    private final String USERNAME_NOT_FOUND_MESSAGE = "The username has been not found";
     @Override
-    public UserDetails loadUserByUsername(String token) throws UsernameNotFoundException {
-        Optional<UserInfoDto> userInfoDtoOptional = userRepository.authenticateUserByToken("Bearer " + token);
+    public UserDetails loadUserByUsername(String token){
+        String subject = tokenProviderPort.extractSubject(token);
+        String role = tokenProviderPort.extractRole(token);
 
-        if (userInfoDtoOptional.isPresent()) {
-            UserInfoDto userInfo = userInfoDtoOptional.get();
-            JwtCustomUserDetails jwtCustomUserDetails =
-                    new JwtCustomUserDetails(userInfo.getIdUser(),
-                            userInfo.getUsername(),
-                            token,
-                            AuthorityUtils.createAuthorityList( userInfo.getRoles().get(0)),
-                            false,
-                            false,
-                            false,
-                            true
-                            );
-            return jwtCustomUserDetails;
+        if (subject != null && !subject.isEmpty()) {
+            Collection<GrantedAuthority> authorities = Arrays.asList(
+                    new SimpleGrantedAuthority(role)
+            );
+            CustomUserDetails userDetails = new CustomUserDetails(subject, token, authorities, true);
+            return userDetails;
         } else {
-            throw new UsernameNotFoundException(token);
+            throw new UsernameNotFoundException(USERNAME_NOT_FOUND_MESSAGE);
         }
     }
-
 }

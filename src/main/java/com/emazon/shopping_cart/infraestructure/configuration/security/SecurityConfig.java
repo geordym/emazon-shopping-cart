@@ -37,9 +37,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(registry -> {
-                   // registry.requestMatchers("/api/marcas").hasAuthority(RoleEnum.ADMINISTRADOR.getName());
-                   // registry.requestMatchers("/api/categories").hasAuthority(RoleEnum.ADMINISTRADOR.getName());
-                    registry.requestMatchers("/api/shoppingcart/items").hasAuthority(RoleEnum.CLIENTE.getName());
+                    registry.requestMatchers("/api/shoppingcart/items").hasRole(RoleEnum.CLIENTE.getName());
                 })
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
